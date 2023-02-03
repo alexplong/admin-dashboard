@@ -24,10 +24,13 @@ import {
   Editor,
 } from "./pages";
 
+import { useStateContext } from "./contexts/ContextProvider";
+
 import "./App.css";
 
 function App() {
-  const [activeMenu, setActiveMenu] = React.useState(true);
+  const { activeMenu } = useStateContext();
+
   return (
     <div>
       <BrowserRouter>

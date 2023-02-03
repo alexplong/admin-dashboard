@@ -4,6 +4,7 @@ import { SiShopware } from 'react-icons/si';
 import { MdOutlineCancel } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups'
 
+import { useStateContext } from '../contexts/ContextProvider';
 import { links } from '../data/dummy'
 // import of links from dummy data sets up the sidebar
 // links is an array containing objects
@@ -13,7 +14,14 @@ import { links } from '../data/dummy'
 
 
 const Sidebar = () => {
-  const activeMenu = true;
+  const { activeMenu, setActiveMenu, screenSize } = useStateContext();
+
+
+  const handleCloseSideBar = () => {
+    if (activeMenu && screenSize <= 900) {
+      setActiveMenu(false)
+    }
+  }
 
   const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-white text-md m-2';
   const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-white text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2'
@@ -25,13 +33,21 @@ const Sidebar = () => {
         <div className='flex justify-between items-center'>
 
           {/* Sidebar Title */}
-          <Link to="/" onClick={() => { }}
+          <Link
+            to="/"
+            onClick={handleCloseSideBar}
             className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900">
-            <SiShopware /><span>Shoppy</span>
+            <SiShopware
+            />
+            <span>Shoppy</span>
           </Link>
           {/* Exit Sidebar sm */}
           <TooltipComponent content="Menu" position="BottomCenter">
-            <button type="button" onClick={() => {}} className="text-xl rounded-full p-3 hover:bg-light-gray mt-4 block md:hidden">
+            <button
+              type="button"
+              onClick={() => { setActiveMenu((prevActiveState) => !prevActiveState) }}
+              className="text-xl rounded-full p-3 hover:bg-light-gray mt-4 block md:hidden"
+            >
               <MdOutlineCancel />
             </button>
           </TooltipComponent>
@@ -41,7 +57,9 @@ const Sidebar = () => {
           {/* Map through each object in links array to create subheading with title */}
           {links.map((item) => (
             <div key={item.title}>
-              <p className='text-gray-400 m-3 mt-4 uppercase'>
+              <p
+                className='text-gray-400 m-3 mt-4 uppercase'
+              >
                 {item.title}
               </p>
               {/* Map through each link in links array to cretae Navlink */}
@@ -49,7 +67,7 @@ const Sidebar = () => {
                 <NavLink
                   to={`/${link.name}`}
                   key={link.name}
-                  onClick={() => { }}
+                  onClick={handleCloseSideBar}
                   className={({ isActive }) => isActive ? activeLink : normalLink}
                 >{link.icon}
                   <span className='capitalize'>
